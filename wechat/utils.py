@@ -12,7 +12,7 @@ secret = '开发者密码(AppSecret)'
 
 def img_download(url, name):
     r = requests.get(url)
-    with open('images/{}-{}.jpg'.format(name, time.strftime("%Y_%m_%d%H_%M_%S", time.localtime())), 'wb') as fd:
+    with open(f'images/{name}-{time.strftime("%Y_%m_%d%H_%M_%S", time.localtime())}.jpg', 'wb') as fd:
         fd.write(r.content)
     if os.path.getsize(fd.name) >= 1048576:
         return 'large'
@@ -23,7 +23,8 @@ def img_download(url, name):
 def get_access_token(appid, secret):
     '''获取access_token,100分钟刷新一次'''
 
-    url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={}&secret={}'.format(appid, secret)
+    url = f'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={secret}'
+
     r = requests.get(url)
     parse_json = json.loads(r.text)
     global token
@@ -35,8 +36,9 @@ def get_access_token(appid, secret):
 
 def img_upload(mediaType, name):
     global token
-    url = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=%s&type=%s" % (token, mediaType)
-    files = {'media': open('{}'.format(name), 'rb')}
+    url = f"https://api.weixin.qq.com/cgi-bin/media/upload?access_token={token}&type={mediaType}"
+
+    files = {'media': open(f'{name}', 'rb')}
     r = requests.post(url, files=files)
     parse_json = json.loads(r.text)
     return parse_json['media_id']

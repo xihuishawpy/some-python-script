@@ -8,13 +8,14 @@ import pymysql.cursors
 
 def get_conn():
     '''建立数据库连接'''
-    conn = pymysql.connect(host='localhost',
-                                user='root',
-                                password='root',
-                                db='python',
-                                charset='utf8mb4',
-                                cursorclass=pymysql.cursors.DictCursor)
-    return conn
+    return pymysql.connect(
+        host='localhost',
+        user='root',
+        password='root',
+        db='python',
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor,
+    )
 
 
 def insert(conn, info):
@@ -47,8 +48,7 @@ def get_json(url, page, lang_name):
     list_con = json['content']['positionResult']['result']
     info_list = []
     for i in list_con:
-        info = []
-        info.append(i.get('companyShortName', '无'))
+        info = [i.get('companyShortName', '无')]
         info.append(i.get('companyFullName', '无'))
         info.append(i.get('industryField', '无'))
         info.append(i.get('companySize', '无'))
@@ -67,7 +67,8 @@ def main():
         page = 1
         ws1 = wb.active
         ws1.title = lang_name
-        url = 'https://www.lagou.com/jobs/positionAjax.json?city={}&needAddtionalResult=false'.format(i)
+        url = f'https://www.lagou.com/jobs/positionAjax.json?city={i}&needAddtionalResult=false'
+
         while page < 31:   # 每个城市30页信息
             info = get_json(url, page, lang_name)
             page += 1
@@ -77,7 +78,7 @@ def main():
                 insert(conn, tuple(row))  # 插入数据库，若不想存入 注释此行
                 ws1.append(row)
     conn.close()  # 关闭数据库连接，不存数据库 注释此行
-    wb.save('{}职位信息.xlsx'.format(lang_name))
+    wb.save(f'{lang_name}职位信息.xlsx')
 
 if __name__ == '__main__':
     main()

@@ -22,7 +22,5 @@ def wake_up(request, mac='DC-4A-3E-78-3E-0A'):
         time.sleep(1)
         sock.sendto(send_data, (BROADCAST, 7))
         return HttpResponse()
-        print("Done")
     except Exception as e:
         return HttpResponse()
-        print(e)

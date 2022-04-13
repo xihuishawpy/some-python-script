@@ -10,8 +10,7 @@ ws1.title='书籍'
 def get_html(url):
     header = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
-    html = requests.get(url, headers=header).content
-    return html
+    return requests.get(url, headers=header).content
 
 
 def get_con(html):
@@ -23,16 +22,10 @@ def get_con(html):
     for i in book_list.find_all('table'):
         book_name = i.find('div', attrs={'class': 'pl2'})
         m = list(book_name.find('a').stripped_strings)
-        if len(m)>1:
-            x = m[0]+m[1]
-        else:
-            x = m[0]
+        x = m[0]+m[1] if len(m)>1 else m[0]
         #print(x)
         name.append(x)
-    if next_page:
-        return name, next_page.get('href')
-    else:
-        return name, None
+    return (name, next_page.get('href')) if next_page else (name, None)
 
 
 def main():
@@ -43,7 +36,7 @@ def main():
         name, url = get_con(html)
         name_list = name_list + name
     for i in name_list:
-        location = 'A%s'%(name_list.index(i)+1)
+        location = f'A{name_list.index(i) + 1}'
         print(i)
         print(location)
         ws1[location]=i

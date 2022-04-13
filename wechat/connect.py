@@ -15,10 +15,7 @@ class Connect(object):
     def on_get(self, req, resp):
         query_string = req.query_string
         query_list = query_string.split('&')
-        b = {}
-        for i in query_list:
-            b[i.split('=')[0]] = i.split('=')[1]
-
+        b = {i.split('=')[0]: i.split('=')[1] for i in query_list}
         try:
             check_signature(token='lengxiao', signature=b['signature'], timestamp=b['timestamp'], nonce=b['nonce'])
             resp.body = (b['echostr'])
@@ -35,11 +32,11 @@ class Connect(object):
             resp.body = (xml)
             resp.status = falcon.HTTP_200
         elif msg.type == 'image':
-            name = img_download(msg.image, msg.source)  
+            name = img_download(msg.image, msg.source)
             print(name)
-            r = access_api('images/' + name)
+            r = access_api(f'images/{name}')
             if r == 'success':
-                media_id = img_upload('image', 'faces/' + name)
+                media_id = img_upload('image', f'faces/{name}')
                 reply = ImageReply(media_id=media_id, message=msg)
             else:
                 reply = TextReply(content='人脸检测失败，请上传1M以下人脸清晰的照片', message=msg)

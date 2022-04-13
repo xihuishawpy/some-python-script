@@ -36,11 +36,11 @@ def get_pic(link, text):
     soup = BeautifulSoup(html, 'html.parser')
     pic_list = soup.find('div', id="picture").find_all('img')  # 找到界面所有图片
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0"}
-    create_dir('pic/{}'.format(text))
+    create_dir(f'pic/{text}')
     for i in pic_list:
         pic_link = i.get('src')  # 拿到图片的具体 url
         r = requests.get(pic_link, headers=headers)  # 下载图片，之后保存到文件
-        with open('pic/{}/{}'.format(text, pic_link.split('/')[-1]), 'wb') as f:
+        with open(f"pic/{text}/{pic_link.split('/')[-1]}", 'wb') as f:
             f.write(r.content)
             time.sleep(1)   # 休息一下，不要给网站太大压力，避免被封
 
@@ -57,19 +57,19 @@ def execute(url):
 
 def main():
     create_dir('pic')
-    queue = [i for i in range(1, 72)]   # 构造 url 链接 页码。
+    queue = list(range(1, 72))
     threads = []
-    while len(queue) > 0:
+    while queue:
         for thread in threads:
             if not thread.is_alive():
                 threads.remove(thread)
-        while len(threads) < 5 and len(queue) > 0:   # 最大线程数设置为 5
+        while len(threads) < 5 and queue:   # 最大线程数设置为 5
             cur_page = queue.pop(0)
-            url = 'http://meizitu.com/a/more_{}.html'.format(cur_page)
+            url = f'http://meizitu.com/a/more_{cur_page}.html'
             thread = threading.Thread(target=execute, args=(url,))
             thread.setDaemon(True)
             thread.start()
-            print('{}正在下载{}页'.format(threading.current_thread().name, cur_page))
+            print(f'{threading.current_thread().name}正在下载{cur_page}页')
             threads.append(thread)
 
 

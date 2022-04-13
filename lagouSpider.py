@@ -7,25 +7,25 @@ def get_json(url, page, lang_name):
     list_con = json['content']['positionResult']['result']
     info_list = []
     for i in list_con:
-        info = []
-        info.append(i['companyShortName'])
-        info.append(i['companyName'])
-        info.append(i['salary'])
-        info.append(i['city'])
-        info.append(i['education'])
+        info = [
+            i['companyShortName'],
+            i['companyName'],
+            i['salary'],
+            i['city'],
+            i['education'],
+        ]
+
         info_list.append(info)
     return info_list
 
 
 def main():
     lang_name = input('职位名：')
-    page = 1
     url = 'http://www.lagou.com/jobs/positionAjax.json?needAddtionalResult=false'
     info_result = []
-    while page < 31:
+    for page in range(1, 31):
         info = get_json(url, page, lang_name)
         info_result = info_result + info
-        page += 1
     wb = Workbook()
     ws1 = wb.active
     ws1.title = lang_name

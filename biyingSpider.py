@@ -10,6 +10,5 @@ a = re.findall(reg, content, re.S)[0]
 print(a)
 picUrl = url + a
 read = requests.get(picUrl)
-f = open('%s.jpg' % local, 'wb')
-f.write(read.content)
-f.close()
+with open(f'{local}.jpg', 'wb') as f:
+    f.write(read.content)
