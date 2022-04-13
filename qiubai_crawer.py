@@ -46,7 +46,7 @@ def main():
     # 我们点击下面链接，在页面下方可以看到共有13页，可以构造如下 url，
     # 当然我们最好是用 Beautiful Soup找到页面底部有多少页。
     for i in range(1, 14):
-        url = 'https://qiushibaike.com/text/page/{}'.format(i)
+        url = f'https://qiushibaike.com/text/page/{i}'
         html = download_page(url)
         get_content(html, i)
 

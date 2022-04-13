@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 def count_pm(*args):
-    alist = list([round(i*2-8,2) for i in args])  #计算三种颗粒浓度
+    alist = [round(i*2-8,2) for i in args]
     result = []
     for pm in alist:
     	pm_abs = abs(pm)

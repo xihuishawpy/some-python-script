@@ -13,10 +13,12 @@ conn = pymysql.connect(**config)
 conn.autocommit(1)
 cursor = conn.cursor()
 name = 'lyexcel'
-cursor.execute('create database if not exists %s' %name)
+cursor.execute(f'create database if not exists {name}')
 conn.select_db(name)
 table_name = 'info'
-cursor.execute('create table if not exists %s(id MEDIUMINT NOT NULL AUTO_INCREMENT,name varchar(30),tel varchar(30),primary key (id))'%table_name)
+cursor.execute(
+    f'create table if not exists {table_name}(id MEDIUMINT NOT NULL AUTO_INCREMENT,name varchar(30),tel varchar(30),primary key (id))'
+)
 
 wb2 = load_workbook('hpu.xlsx')
 ws=wb2.get_sheet_names()

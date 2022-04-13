@@ -38,9 +38,9 @@ def login(username,password,oncaptcha,sessiona,headers):
     clientId = 'c3cef7c66a1843f8b3a9e6a1e3160e20'
     source ='com.zhihu.web'
     timestamp = str((time.time()*1000)).split('.')[0]  # 签名只按这个时间戳变化
-       
+
     captcha_content = sessiona.get('https://www.zhihu.com/captcha.gif?r=%d&type=login'%(time.time()*1000),headers=headers).content
-    
+
     data = {
         "client_id":clientId,
         "grant_type":grantType,
@@ -54,12 +54,12 @@ def login(username,password,oncaptcha,sessiona,headers):
         "ref_source":"other_",
         "utm_source":""
     }
-    
-    print("**2**: "+str(data))
+
+    print(f"**2**: {data}")
     print("-"*50)
     resp = sessiona.post('https://www.zhihu.com/api/v3/oauth/sign_in',data,headers=headers).content
     print(BeautifulSoup(resp,'html.parser'))
-    
+
     print("-"*50)
     return resp 
 
